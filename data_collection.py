@@ -14,7 +14,6 @@ __copyright__ = 'Copyright 2020'
 __license__ = 'MIT'
 
 import pandas as pd
-import numpy as np
 
 sp500 = pd.read_html('https://en.wikipedia.org/wiki/S%26P_500_Index')
 df = None
@@ -28,6 +27,18 @@ df = df[['Change in Index', 'Year']]
 mask = df['Year'].map(lambda s:s.isnumeric())
 
 df = df[mask]
+print(df)
+#CONVERT THE PERCENTAGES TO USEFUL DECIMALS
+def tryconvert(s):
+    """ Function to fix incompatible '-' sign from html read in table"""
+    try:
+        return float(s)
+    except:
+        return float('-'+s[1::])
+df['Change in Index'] = df['Change in Index'].apply(lambda s:s[:-1])
+df['Change in Index'] = df['Change in Index'].apply(lambda s:tryconvert(s))
+df['Change in Index'] = df['Change in Index'].apply(lambda s:float(s)/100)
 
+print(df)
 #WRITE TO FEATHER FILE
 df.to_feather('S&P500_yearly_performance.ftr')
