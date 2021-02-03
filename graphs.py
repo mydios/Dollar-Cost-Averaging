@@ -11,10 +11,14 @@ import pandas as pd
 import seaborn
 import matplotlib.pyplot as plt
 
-def graph_SP500_YROI():
-    data = pd.read_feather('S&P500_yearly_performance.ftr')
-    X = data['Year']
-    Y = data['Change in Index']
-    seaborn.lineplot(x = X, y = Y)
-    plt.xticks(list(range(len(X)))[::5]) 
+def graph_lineplot(df, xn=None, yn=None):
+    seaborn.lineplot(data = df, x=xn, y=yn)
+    plt.show()
+
+def graph_barplot(df, xn=None, yn=None, ylim=None, title=None):
+    seaborn.barplot(data = df, x=xn, y=yn)
+    if ylim is not None:
+        plt.ylim(ylim)
+    if title is not None:
+        plt.title(title)
     plt.show()
